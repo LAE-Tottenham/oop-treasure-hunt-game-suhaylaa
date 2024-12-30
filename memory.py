@@ -1,14 +1,3 @@
-class person:
-  def __init__(self,role,name):
-    self.name = name
-    self.role = role
-
-class thing:
-    def __init__(self,name,weight,type):
-        self.name = name
-        self.weight = weight
-        self.type = type
-
 import random
 
 class MGame:
@@ -84,7 +73,6 @@ class MGame:
     def play_game(self):
         """Main game loop."""
         print("Welcome to the Memory Card Game!")
-        print("*note - it is 0 indexed.")
 
         # Game loop
         while self.matched_pairs < self.total_pairs:
@@ -93,9 +81,8 @@ class MGame:
                 input("Press Enter to continue...")
 
         print("Congratulations! You've matched all pairs!")
-        
+
 # Start the game
 if __name__ == "__main__":
     game = MGame()
     game.play_game()
-

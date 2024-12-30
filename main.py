@@ -2,7 +2,6 @@ from place import Place
 from player import Player
 from person import *
 from time import sleep 
-
 class Game():
     def __init__(self):
         self.current_place = None
@@ -12,14 +11,22 @@ class Game():
         # here you will setup your Game
         # places
         bedroom = Place('Bedroom')
+
+        global dining
         dining = Place('Dining Room', True)
+
         attic = Place('Attic')
+    
+        global basement
         basement = Place('Basement',True)
+
         kitchen = Place('Kitchen')
         office = Place('Office')
         living = Place('Living Room')
         garden = Place('Garden') 
         entrance = Place('Entrance')
+
+        global frontYard
         frontYard = Place('Front Yard',True)
         
         
@@ -43,15 +50,21 @@ class Game():
         
         # items & people
         wallet = thing('wallet',4,'thing')
+        
+        global key
         key = thing('Key',2,'tool')
+
         bedroom.add_item(wallet)
         bedroom.add_item(key)
         
-        note = thing('Code',1,'thing')
-        dining.add_item(note)
+        puzzle = thing('Puzzle',0,'puzzle')
+        dining.add_item(puzzle)
 
         crowbar = thing('Crowbar',9,'weapon')
+
+        global doorknob
         doorknob = thing('Doorknob',4,'tool')
+
         attic.add_item(crowbar)
         attic.add_item(doorknob)
 
@@ -160,6 +173,7 @@ class Game():
     1. Venture in to another hall
     2. Claim an artifact
     3. Inspect your belongings
+    4. Converse with someone
         
     ''')
             if opt == "1":
@@ -202,8 +216,29 @@ class Game():
                         
 
             elif opt == "2":
-                
-                pass
+                self.current_place.show_items()
+                Q1 = input("Which artifact would you like to claim? ")
+                if self.current_place.items[int(Q1)-1].name == 'Puzzle':
+                    P = MGame()
+                    P.play_game()
+                    print("You have unlocked a secret item!")
+                    note = thing('Code',1,'thing')
+                    player.add_item(note)
+                    print("You now have the code for the basement! It has been unlocked.")
+                    basement.locked = False
+
+                elif self.current_place.items[int(Q1)-1].name == 'Doorknob':
+                    print("You have obtained the doorknob for the dining room! It has been unlocked.")
+                    dining.locked = False
+                    
+                elif self.current_place.items[int(Q1)-1].name == 'Key':
+                    player.add_item(key)
+                    print("You have obtained the key for the front door! The Front Yard has been unlocked.")
+                    frontYard.locked = False  
+                else:
+
+                    player.add_item(self.current_place.items[int(Q1)-1])
+
             elif opt == "3":
                 # add code
                 pass
