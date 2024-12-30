@@ -1,7 +1,6 @@
 from place import Place
 from player import Player
-from item import Item
-from person import person
+from person import *
 from time import sleep 
 
 class Game():
@@ -37,31 +36,32 @@ class Game():
         dining.add_next_place(garden)
         garden.add_next_place(entrance)
         entrance.add_next_place(frontYard)
+        basement.add_next_place(living)
         
         self.current_place =  bedroom
         # etc. 
         
         # items & people
-        wallet = Item('Wallet',4,'thing')
-        key = Item('Key',2,'tool')
+        wallet = thing('wallet',4,'thing')
+        key = thing('Key',2,'tool')
         bedroom.add_item(wallet)
         bedroom.add_item(key)
         
-        note = Item('Code',1,'thing')
+        note = thing('Code',1,'thing')
         dining.add_item(note)
 
-        crowbar = Item('Crowbar',9,'weapon')
-        doorknob = Item('Doorknob',4,'tool')
+        crowbar = thing('Crowbar',9,'weapon')
+        doorknob = thing('Doorknob',4,'tool')
         attic.add_item(crowbar)
         attic.add_item(doorknob)
 
-        framedMap = Item('Framed Map',0,'thing')
-        chocolate = Item('Chocolate',2,'food')
+        framedMap = thing('Framed Map',0,'thing')
+        chocolate = thing('Chocolate',2,'food')
         basement.add_item(chocolate)
         basement.add_item(framedMap)
 
-        diary = Item('Diary',0,'book')
-        bandages = Item('Bandages',2,'medicine')
+        diary = thing('Diary',0,'book')
+        bandages = thing('Bandages',2,'medicine')
         class chef(person):
             def talk(self):
                 print("It would be best if you went back to bed immediately.")
@@ -70,14 +70,14 @@ class Game():
         kitchen.add_item(bandages)
         kitchen.add_person(c)
 
-        apple = Item('Apple',1,'food')
-        gun = Item = ('Gun,',8,'weapon')
+        apple = thing('Apple',1,'food')
+        gun = thing('Gun,',8,'weapon')
         office.add_item(apple)
         office.add_item(gun)
         
-        childBook = Item("Child's Book",0,'thing')
-        phone = Item('Phone',0,'broken')
-        candle = Item('Candle',0,'thing')
+        childBook = thing("Child's Book",0,'thing')
+        phone = thing('Phone',0,'broken')
+        candle = thing('Candle',0,'thing')
         class maid(person):
             def talk(self):
                 print('''           *Panicked look* 
@@ -89,8 +89,8 @@ class Game():
         living.add_item(candle)
         living.add_person(m)
 
-        litterBox = Item('Litter Box',0,'thing')
-        hammer = Item('Hammer',10,'weapon')
+        litterBox = thing('Litter Box',0,'thing')
+        hammer = thing('Hammer',10,'weapon')
         class butler(person):
             def talk(self):
                 print(''' There is no starightforward path to leaving this house.
@@ -125,16 +125,7 @@ class Game():
 ''')
         name = input("Enter player name: ")
         player = Player(name)
-        print('''
-              
-              
-              
-              
-              
-              
-              
-              
-              ''')
+
         sleep(2)
         
         print('''You awaken with a sudden gasp, your body stiff and disoriented. As your eyes flutter open, 
@@ -143,7 +134,7 @@ class Game():
 
               In fact, you can't remember how you got here.
 ''')
-        sleep(2)
+        sleep(4)
         
 
         print('''
@@ -162,48 +153,60 @@ class Game():
                                                                                                           ''')
 
         sleep(2)
-       
-        print("You are currently in " + self.current_place.name)
-        self.current_place.show_next_places()
-        opt = input("""
-What would you like to do?
-1. Move in to a different room
-2. Pickup item
-3. Check inventory
-etc.      
-""")
-        if opt == "1":
-            opt2 = input("Which room would you like to enter? ")
-            self.current_place.show_next_places()
-            if self.current_place.next_places[0].locked == True or self.current_place.next_places[1].locked == True:
-                print("This room is currently locked")
-                if self.current_place.next_places[0].name == 'Dining Room' or self.current_place.next_places[1].name == 'Dining Room':
-                    print("You need to find the Doorknob for this room.")
-                elif self.current_place.next_places[0].name == 'Basement' or self.current_place.next_places[1].name == 'Basement':
-                    print('''You need to find the code for the keypad to this room.
-                             Perhaps you should look in the dining room.''')
-                elif self.current_place.next_places[0].name == 'Front Yard' or self.current_place.next_places[1].name == 'Front Yard':
-                    print("You need to find the key to unlock this door.")
+        while True:
+            print("You find yourself within the " + self.current_place.name)
+            opt = input(f'''
+    What will you do, Dear {player.name}
+    1. Venture in to another hall
+    2. Claim an artifact
+    3. Inspect your belongings
+        
+    ''')
+            if opt == "1":
+                self.current_place.show_next_places()
+                opt2 = input("Which room would you like to enter? ")
+                if len(self.current_place.next_places) == 1:
+                    if self.current_place.next_places[int(opt2)-1].locked == True:
+                        print(f'The door to this chamber has been sealed. Choose another option, dear {player.name}')
+                        continue
+                    
+                    else:
+                        self.current_place =self.current_place.next_places[0]
 
-            if self.current_place.next_places[0].locked == True:
-                self.current_place = self.current_place.next_places[1]
-            elif self.current_place.next_places[1].locked == True:
-                self.current_place = self.current_place.next_places[0]
+                    
+                else:
+                    if self.current_place.next_places[int(opt2)-1].locked == True:
+                        print("This chamber cannot be accessed.")
+                        if self.current_place.next_places[int(opt2)-1].name == 'Dining Room':
+                            print("You need to find the Doorknob for this room.")
+                        elif self.current_place.next_places[int(opt2)-1].name == 'Basement':
+                            print('''You need to find the code for the keypad to this room.
+                                        Perhaps you should look in the dining room.''')
+                        elif self.current_place.next_places[(opt2)-1].name == 'Front Yard':
+                            print("You need to find the key to unlock this door.")
+                                
+                        if opt2 == '1':
+                            self.current_place =self.current_place.next_places[1]
+                        elif opt2 == '2':
+                            self.current_place =self.current_place.next_places[0]
+
+                        print(f'You cannot access that room so you must go to the {self.current_place.name}')
+                        
+
+                    else: 
+                        if opt2 == '1':
+                            self.current_place = self.current_place.next_places[0]
+                        elif opt2 == '2':
+                            self.current_place = self.current_place.next_places[1]
+
+                        
+
+            elif opt == "2":
                 
-            if opt2 == 1:
-                self.current_place = self.current_place.next_places[0]
-            elif opt2 == 2:
-                self.current_place = self.current_place.next_places[1]
-
-
-               
-
-        elif opt == "2":
-            # add code
-            pass
-        elif opt == "3":
-            # add code
-            pass
+                pass
+            elif opt == "3":
+                # add code
+                pass
             
 game = Game()
 game.setup()

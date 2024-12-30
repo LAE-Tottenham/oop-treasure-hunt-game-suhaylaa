@@ -16,7 +16,7 @@ class Player():
         if (self.inventory_size + item.weight) <= self.inventory_max_weight:
             self.inventory.append(item)
         else:
-            print("Your inventory doesn't have enough space...")
+            print("Your inventory is brimming; there is no space for more...")
 
     def use_item(self, item_instance):
         if item_instance.type == "food":

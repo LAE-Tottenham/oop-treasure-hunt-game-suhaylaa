@@ -19,9 +19,19 @@ class Place():
 
 
     def show_next_places(self):
-        print("The possible places you can go to are: ")
-        for place in self.next_places:
-            for i in len(self.next_places):
-                print(f'{i+1}". " {place.name}')
+        print("The possible places open for exploring are: ")
+        for i in range(0,len(self.next_places)):
+            print(f'{i+1}. {self.next_places[i].name}')
+
+    def show_items(self):
+        print("The artifacts available within this space are: ")
+        for i in range(0,len(self.items)):
+            print(f'{i+1}.{self.items[i].name}')
 
     # add more methods as needed
+
+b = Place('bedroom')
+c = Place('c')
+d = Place('d')
+b.add_next_place(c)
+b.add_next_place(d)
