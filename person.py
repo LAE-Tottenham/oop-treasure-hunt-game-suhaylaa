@@ -16,16 +16,14 @@ class MGame:
         self.board = self.initialize_board()
         self.revealed = [[False for _ in range(4)] for _ in range(4)]  # Track revealed cards
         self.matched_pairs = 0
-        self.total_pairs = 8  # 8 pairs to match (for a 4x4 grid)
+        self.total_pairs = 8  
 
     def initialize_board(self):
-        """Initialize the board with pairs of cards."""
-        cards = list(range(1, 9)) * 2  # Create pairs (1-1, 2-2, ..., 8-8)
-        random.shuffle(cards)  # Shuffle the cards
-        return [cards[i:i + 4] for i in range(0, len(cards), 4)]  # Create 4x4 grid
+        cards = list(range(1, 9)) * 2  # Create pairs
+        random.shuffle(cards) 
+        return [cards[i:i + 4] for i in range(0, len(cards), 4)]  # Create grid
 
     def print_board(self):
-        """Print the board with hidden and revealed cards."""
         for r in range(4):
             for c in range(4):
                 if self.revealed[r][c]:
@@ -35,7 +33,6 @@ class MGame:
             print()
 
     def get_player_move(self):
-        """Get a valid player move (row and column)."""
         while True:
             try:
                 move = input("Enter your move (row col): ").split()
@@ -82,7 +79,6 @@ class MGame:
             return False
 
     def play_game(self):
-        """Main game loop."""
         print("Welcome to the Memory Card Game!")
         print("*note - it is 0 indexed.")
 

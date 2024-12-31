@@ -2,6 +2,8 @@ from place import Place
 from player import Player
 from person import *
 from time import sleep 
+from fight import *
+
 class Game():
     def __init__(self):
         self.current_place = None
@@ -44,6 +46,8 @@ class Game():
         garden.add_next_place(entrance)
         entrance.add_next_place(frontYard)
         basement.add_next_place(living)
+        office.add_next_place(bedroom)
+        entrance.add_next_place(attic)
         
         self.current_place =  bedroom
         # etc. 
@@ -78,6 +82,8 @@ class Game():
         class chef(person):
             def talk(self):
                 print("It would be best if you went back to bed immediately.")
+
+        global c
         c = chef('Chef','Colin')
         kitchen.add_item(diary)
         kitchen.add_item(bandages)
@@ -96,6 +102,7 @@ class Game():
                 print('''           *Panicked look* 
         Please stay away from the front door it really isn't safe!
         You may find more interesting information upstairs in the attic.''')
+        global m
         m = maid('Maid','Agnes')
         living.add_item(childBook)
         living.add_item(phone)
@@ -108,6 +115,7 @@ class Game():
             def talk(self):
                 print(''' There is no starightforward path to leaving this house.
         Perhaps more success would be found downstairs.''')
+        global b 
         b = butler('Butler','Geoffrey')
         garden.add_item(litterBox)
         garden.add_item(hammer)
@@ -116,10 +124,11 @@ class Game():
         class driver(person):
             def talk(self):
                 print(' *Stands silently and ominously* ')
+        global d
         d = driver('Driver','Richard')
         entrance.add_person(d)
 
-
+            
         # finish the setup function..
 
     def start(self):
@@ -137,7 +146,7 @@ class Game():
  
 ''')
         name = input("Enter player name: ")
-        player = Player(name)
+        player = Player(name,12,30)
 
         sleep(2)
         
@@ -168,6 +177,26 @@ class Game():
         sleep(2)
         while True:
             print("You find yourself within the " + self.current_place.name)
+            if self.current_place.name == 'Front Yard':
+                            for i in player.inventory:
+                                w =  0
+                                if i.type == 'weapon':
+                                    w = w + 1
+                            if w > 0:
+                                H = Boss('Husband Richard',100,15,25)
+                                boss_fight(player,H)
+                            else:
+                                print('You need a weapon to beat your husband and finally escape. You lose!')
+                                print('''
+.------..------..------..------.     .------..------..------..------.
+|G.--. ||A.--. ||M.--. ||E.--. |.-.  |O.--. ||V.--. ||E.--. ||R.--. |
+| :/\: || (\/) || (\/) || (\/) ((5)) | :/\: || :(): || (\/) || :(): |
+| :\/: || :\/: || :\/: || :\/: |'-.-.| :\/: || ()() || :\/: || ()() |
+| '--'G|| '--'A|| '--'M|| '--'E| ((1)) '--'O|| '--'V|| '--'E|| '--'R|
+`------'`------'`------'`------'  '-'`------'`------'`------'`------'
+                                          ''')
+                                print("Your body was buried in a ditch not too far away. No one ever found you")
+                                break
             opt = input(f'''
     What will you do, Dear {player.name}
     1. Venture in to another hall
@@ -188,7 +217,7 @@ class Game():
                         self.current_place =self.current_place.next_places[0]
 
                     
-                else:
+                elif len(self.current_place.next_places) == 2:
                     if self.current_place.next_places[int(opt2)-1].locked == True:
                         print("This chamber cannot be accessed.")
                         if self.current_place.next_places[int(opt2)-1].name == 'Dining Room':
@@ -212,6 +241,36 @@ class Game():
                             self.current_place = self.current_place.next_places[0]
                         elif opt2 == '2':
                             self.current_place = self.current_place.next_places[1]
+                
+                elif len(self.current_place.next_places) == 3:
+                    while True:
+                        if self.current_place.next_places[int(opt2)-1].locked == True:
+                            print("This chamber cannot be accessed.")
+                            if self.current_place.next_places[int(opt2)-1].name == 'Dining Room':
+                                print("You need to find the Doorknob for this room.")
+                            elif self.current_place.next_places[int(opt2)-1].name == 'Basement':
+                                print('''You need to find the code for the keypad to this room.
+                                            Perhaps you should look in the dining room.''') 
+                            elif self.current_place.next_places[(opt2)-1].name == 'Front Yard':
+                                print("You need to find the key to unlock this door.")
+
+                        opt3 = input("Please choose a different room you would like to enter? ")
+                        self.current_place.show_next_places()
+                        if self.current_place.next_places[int(opt3)-1].locked == False:
+                            if opt3 == '1':
+                                self.current_place = self.current_place.next_places[0]
+                            elif opt3 == '2':
+                                self.current_place = self.current_place.next_places[1]
+                            elif opt3 == '3':
+                                self.current_place = self.current_place.next_places[2]
+                            break
+                        
+                                    
+
+
+
+                        
+                        
 
                         
 
@@ -242,6 +301,18 @@ class Game():
             elif opt == "3":
                 # add code
                 pass
+            elif opt == '4':
+                if self.current_place.name == 'Kitchen':
+                    c.talk()
+                elif self.current_place.name == 'Living Room':
+                    m.talk()
+                elif self.current_place.name == 'Garden':
+                    b.talk()
+                elif self.current_place.name == 'Entrance':
+                    d.talk()
+                else:
+                    print('There is no one in this room to converse with.')
+                    continue
             
 game = Game()
 game.setup()
