@@ -60,7 +60,7 @@ def boss_fight(player, boss):
         elif action == "2":
             player.special_attack(boss)
         elif action == "3":
-            blocked = player.block()
+            player.block()
         else:
             print("Invalid choice, you attack!")
             player.attack(boss)

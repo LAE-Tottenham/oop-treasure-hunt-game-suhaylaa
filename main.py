@@ -48,6 +48,7 @@ class Game():
         basement.add_next_place(living)
         office.add_next_place(bedroom)
         entrance.add_next_place(attic)
+        attic.add_next_place(bedroom)
         
         self.current_place =  bedroom
         # etc. 
@@ -251,7 +252,7 @@ class Game():
                             elif self.current_place.next_places[int(opt2)-1].name == 'Basement':
                                 print('''You need to find the code for the keypad to this room.
                                             Perhaps you should look in the dining room.''') 
-                            elif self.current_place.next_places[(opt2)-1].name == 'Front Yard':
+                            elif self.current_place.next_places[int(opt2)-1].name == 'Front Yard':
                                 print("You need to find the key to unlock this door.")
 
                         opt3 = input("Please choose a different room you would like to enter? ")
@@ -264,14 +265,6 @@ class Game():
                             elif opt3 == '3':
                                 self.current_place = self.current_place.next_places[2]
                             break
-                        
-                                    
-
-
-
-                        
-                        
-
                         
 
             elif opt == "2":
