@@ -229,6 +229,7 @@ class Game():
     `------'`------'`------'`------'  '-'`------'`------'`------'`------'
     ''')
                         play_game = False
+                        break
                     elif option == '2':
                         print("Good choice...")
                         break
