@@ -1,4 +1,5 @@
 import random
+from time import sleep
 from player import Player
 
 class Boss:
@@ -8,6 +9,7 @@ class Boss:
         self.attack_power = attack_power
         self.special_attack_power = special_attack_power
         self.special_attack_ready = True  # Track if special attack is ready
+        self.blockk = False
 
     def attack(self, target):
         damage = random.randint(1, self.attack_power)
@@ -26,13 +28,16 @@ class Boss:
 
     def block(self):
         print(f"{self.name} is preparing to block the next attack!")
-        return True  # Boss blocks, reducing damage from the next attack
+        self.blockk = True # Boss blocks, reducing damage from the next attack
 
-    def take_damage(self, damage, block):
-        if block == True:
+    def take_damage(self, damage):
+        if self.blockk == True:
             # If the boss blocked, reduce damage by half
             damage = damage // 2
             print(f"Blocked the attack! Damage reduced to {damage}.")
+            self.health -= damage
+            print(f"{self.name} takes {damage} damage! Health is now {self.health}.")
+            self.blockk = False
         else:
             self.health -= damage
             print(f"{self.name} takes {damage} damage! Health is now {self.health}.")
@@ -68,6 +73,14 @@ def boss_fight(player, boss):
         # Check if the boss is defeated
         if not boss.is_alive():
             print(f"{boss.name} has been defeated! You win!")
+            print('''
+.------..------..------..------.     .------..------..------..------.
+|G.--. ||A.--. ||M.--. ||E.--. |.-.  |O.--. ||V.--. ||E.--. ||R.--. |
+| :/\: || (\/) || (\/) || (\/) ((5)) | :/\: || :(): || (\/) || :(): |
+| :\/: || :\/: || :\/: || :\/: |'-.-.| :\/: || ()() || :\/: || ()() |
+| '--'G|| '--'A|| '--'M|| '--'E| ((1)) '--'O|| '--'V|| '--'E|| '--'R|
+`------'`------'`------'`------'  '-'`------'`------'`------'`------'
+                  ''')
             break
         
         # Boss's turn
@@ -83,6 +96,18 @@ def boss_fight(player, boss):
         # Check if the player is defeated
         if not player.is_alive():
             print(f"{player.name} has been defeated! You lose!")
+            print('''
+.------..------..------..------.     .------..------..------..------.
+|G.--. ||A.--. ||M.--. ||E.--. |.-.  |O.--. ||V.--. ||E.--. ||R.--. |
+| :/\: || (\/) || (\/) || (\/) ((5)) | :/\: || :(): || (\/) || :(): |
+| :\/: || :\/: || :\/: || :\/: |'-.-.| :\/: || ()() || :\/: || ()() |
+| '--'G|| '--'A|| '--'M|| '--'E| ((1)) '--'O|| '--'V|| '--'E|| '--'R|
+`------'`------'`------'`------'  '-'`------'`------'`------'`------'
+                  
+
+                  ''')
+            sleep(2)
+            print('Your body was buried in a ditch not too far away. No one ever found you.')
             break
         
         # Reset special attack if needed (after each turn)

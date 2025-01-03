@@ -12,7 +12,12 @@ class Player():
         self.attack_power = attack_power
         self.special_attack_power = special_attack_power
         self.special_attack_ready = True
+        self.blocc = False
+        self.places_been = []
         # add more atributes as needed
+
+    def add_places_been(self,place):
+        self.places_been.append(place.name)
 
     def calculate_inventory_size(self):
         for i in self.inventory:
@@ -27,11 +32,13 @@ class Player():
 
 
     def check_inventory(self):
+        print(' Your inventory contains a number of important items, such as:')
         for i  in range (0,len(self.inventory)):
-            print(' Your inventory contains a number of importan items, such as:')
             print(f'{i+1}. {self.inventory[i].name}')
-            print(f'''Your inventory currently contains {self.inventory_size} of weight.
-                      Be careful to not extend it past it maximum of {self.inventory_max_weight}''')
+        print(f'''
+              Your inventory currently contains {self.inventory_size} of weight.
+              Be careful to not extend it past it maximum of {self.inventory_max_weight}
+''')
             
     def attack(self, target):
         damage = random.randint(1, self.attack_power)
@@ -49,13 +56,16 @@ class Player():
 
     def block(self):
         print(f"{self.name} is preparing to block the next attack!")
-        return True  # Player blocks, reducing damage from the next attack
+        self.blocc = True  # Player blocks, reducing damage from the next attack
 
-    def take_damage(self, damage, block):
-        if block == True:
+    def take_damage(self, damage):
+        if self.blocc == True:
             # If the player blocked, reduce damage by half
             damage = damage // 2
             print(f"Blocked the attack! Damage reduced to {damage}.")
+            self.health -= damage
+            print(f"{self.name} takes {damage} damage! Health is now {self.health}.")
+            self.blocc = False
         else:
             self.health -= damage
             print(f"{self.name} takes {damage} damage! Health is now {self.health}.")

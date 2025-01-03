@@ -90,8 +90,4 @@ class MGame:
 
         print("Congratulations! You've matched all pairs!")
         
-# Start the game
-if __name__ == "__main__":
-    game = MGame()
-    game.play_game()
 
