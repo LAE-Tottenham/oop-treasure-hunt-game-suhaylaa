@@ -121,7 +121,7 @@ class Game():
         class butler(person):
             def talk(self):
                 print(''' 
-        Butler: There is no starightforward path to leaving this house.
+        Butler: There is no straightforward path to leaving this house.
                 Perhaps more success would be found downstairs.
                       ''')
         global b 
@@ -133,7 +133,7 @@ class Game():
         class driver(person):
             def talk(self):
                 print('''
-        'My Husband's personal driver appears to be lurking in the corner.'
+        'My Kidnapper's personal driver appears to be lurking in the corner.'
                       
          Driver: *Stands silently and ominously*
                       ''')
@@ -227,7 +227,7 @@ class Game():
     | :\/: || :\/: || :\/: || :\/: |'-.-.| :\/: || ()() || :\/: || ()() |
     | '--'G|| '--'A|| '--'M|| '--'E| ((1)) '--'O|| '--'V|| '--'E|| '--'R|
     `------'`------'`------'`------'  '-'`------'`------'`------'`------'
-    ''')
+    ''')    
                         play_game = False
                         break
                     elif option == '2':
@@ -277,7 +277,7 @@ class Game():
                 opt2 = input("Which room would you like to enter? ")
                 if len(self.current_place.next_places) == 1:
                     if self.current_place.next_places[int(opt2)-1].locked == True:
-                        print(f'The door to this chamber has been sealed. Choose another option, dear {player.name}')
+                        print(f'The door to this chamber has been sealed. Choose another option, Dear {player.name}')
                         continue
                     
                     else:
@@ -358,6 +358,25 @@ class Game():
                 else:
 
                     player.add_item(self.current_place.items[int(Q1)-1])
+                    self.current_place.items.remove(self.current_place.items[int(Q1)-1])
+                    if player.inventory_full == True:
+                        Q2 = input("Would you like to remove an item from your inventory? Y/N").upper()
+                        if Q2 == "Y":
+                            player.show_inventory()
+                            Q3 = input("What would you like to remove? ")
+                            while True:
+                                if Q3.isdigit():
+                                    player.inventory.remove[player.inventory[int(Q3)-1]]
+                                    break
+                                else:
+                                    print("Invalid input. Try again.")
+                                    continue
+
+                        elif Q2 == 'N':
+                            pass
+                        else:
+                            print("Invalid input. Try again.")
+
 
             elif opt == "3":
                 player.calculate_inventory_size()
@@ -366,12 +385,21 @@ class Game():
             elif opt == '4':
                 if self.current_place.name == 'Kitchen':
                     c.talk()
+                    player.talk(self.current_place)
+                    if player.fight == True:
+                        chef = Boss("Chef",75,8,20)
+                        boss_fight(player,chef)
+                        if player.alive == False:
+                            play_game = False
                 elif self.current_place.name == 'Living Room':
                     m.talk()
+                    player.talk(self.current_place)
                 elif self.current_place.name == 'Garden':
                     b.talk()
+                    player.talk(self.current_place)
                 elif self.current_place.name == 'Entrance':
                     d.talk()
+                    player.talk(self.current_place)
                 else:
                     print('There is no one in this room to converse with.')
                     continue

@@ -24,9 +24,12 @@ class Place():
             print(f'{i+1}. {self.next_places[i].name}')
 
     def show_items(self):
-        print("The artifacts available within this space are: ")
-        for i in range(0,len(self.items)):
-            print(f'{i+1}.{self.items[i].name}')
+        if len(self.items) == 0:
+            print("There are no more items to collect in this space:")
+        else:
+            print("The artifacts available within this space are: ")
+            for i in range(0,len(self.items)):
+                print(f'{i+1}.{self.items[i].name}')
 
     # add more methods as needed
 

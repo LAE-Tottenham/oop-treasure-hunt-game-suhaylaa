@@ -10,6 +10,7 @@ class Boss:
         self.special_attack_power = special_attack_power
         self.special_attack_ready = True  # Track if special attack is ready
         self.blockk = False
+        self.alive = True
 
     def attack(self, target):
         damage = random.randint(1, self.attack_power)
@@ -50,14 +51,14 @@ class Boss:
 
 # Function to start the boss fight
 def boss_fight(player, boss):
-    print(f"\nThe boss {boss.name} has appeared!\n")
+    print(f"{boss.name} has threatend you. The fight has escalated.")
     
     turn_count = 0  # To track turns for special attack cooldown
     while player.is_alive() and boss.is_alive():
         turn_count += 1
 
         # Player's turn
-        print("\n--- Player's Turn ---")
+        print(f"--- {player.name}'s Turn ---")
         action = input("Choose action: (1) Attack (2) Special Attack (3) Block: ")
 
         if action == "1":
@@ -81,10 +82,11 @@ def boss_fight(player, boss):
 | '--'G|| '--'A|| '--'M|| '--'E| ((1)) '--'O|| '--'V|| '--'E|| '--'R|
 `------'`------'`------'`------'  '-'`------'`------'`------'`------'
                   ''')
-            break
+            boss.alive = False
+            return boss.alive
         
         # Boss's turn
-        print("\n--- Boss's Turn ---")
+        print(f"--- {boss.name}'s Turn ---")
         action = random.choice([1, 2, 3])  # Randomly decide the boss's action
         if action == 1:
             boss.attack(player)
@@ -108,7 +110,8 @@ def boss_fight(player, boss):
                   ''')
             sleep(2)
             print('Your body was buried in a ditch not too far away. No one ever found you.')
-            break
+            player.alive = False
+            return player.alive
         
         # Reset special attack if needed (after each turn)
         if turn_count % 3 == 0:

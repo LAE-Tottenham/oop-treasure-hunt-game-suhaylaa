@@ -14,8 +14,52 @@ class Player():
         self.special_attack_ready = True
         self.blocc = False
         self.places_been = []
+        self.inventory_full = False
+        self.fight = False
+        self.aliveb= True
         # add more atributes as needed
 
+    def talk(self,place):
+        if place.name == "Kitchen":
+            talk = input(f'''
+                1) {self.name}: Why should I? I don't trust you!!
+                         
+                2) {self.name}: If that's what you think is best.
+                  ''')
+            while True:
+                if talk == "1":
+                    print(f'''
+    {self.name}: Why should I? I don't trust you!!
+    ''')
+                    self.fight = True
+                    return self.fight
+                    
+                elif talk == "2":
+                    print(f'''
+    {self.name}: If that's what you think is best.
+    ''')
+                    break
+                else:
+                    print("Invalid input. Try again")
+                    continue
+
+        if place.name == "Living Room":
+            print(f'''
+{self.name}: Oh. Okay. 
+
+            *That was very strange. I had better listen to her.*
+                  ''')
+            
+        if place.name == "Garden":
+            print(f'''
+                *Why are people speaking in riddles. This place is so strange*
+                  ''')
+
+        if place.name == "Entrance":
+            print(f'''
+{self.name}: *whispers* I hate this place. It's so creepy
+                  ''')   
+        
     def add_places_been(self,place):
         self.places_been.append(place.name)
 
@@ -23,12 +67,22 @@ class Player():
         for i in self.inventory:
             self.inventory_size = self.inventory_size + i.weight
 
+        return self.inventory_size
+
     def add_item(self, item):
         if (self.inventory_size + item.weight) <= self.inventory_max_weight:
             self.inventory.append(item)
             print(f'You have now claimed the {item.name} item as yours!')
+            size = self.calculate_inventory_size()
+            print(f'Your inventory currently contains {size} of weight.')
         else:
             print("Your inventory is brimming; there is no space for more...")
+            self.inventory_full = True
+
+    def show_inventory(self):
+        print("The artifacts within your inventory are: ")
+        for i in range(0,len(self.inventory)):
+            print(f'{i+1}.{self.inventory[i].name}')
 
 
     def check_inventory(self):
