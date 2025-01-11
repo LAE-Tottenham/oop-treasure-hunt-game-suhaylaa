@@ -193,7 +193,11 @@ class Game():
 
         sleep(2)
         while play_game == True:
-            print("You find yourself within the " + self.current_place.name)
+            sleep(1)
+            print(f'''
+                  
+You find yourself within the {self.current_place.name}
+''')
             player.add_places_been(self.current_place)
             if self.current_place.name == 'Basement':
                 count = player.places_been.count('Basement')
@@ -379,8 +383,11 @@ class Game():
 
 
             elif opt == "3":
-                player.calculate_inventory_size()
-                player.check_inventory()
+                if len(player.inventory) == 0:
+                    print("Your Inventory is currently empty.")
+                else:
+                    player.calculate_inventory_size()
+                    player.check_inventory()
                 pass
             elif opt == '4':
                 if self.current_place.name == 'Kitchen':
